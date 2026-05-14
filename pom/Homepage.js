@@ -1,6 +1,7 @@
 export class Homepage {
     constructor(page){
         this.page = page;
+        this.card = page.locator('.card');
     }
 
     async navigateToPage() {
@@ -8,15 +9,13 @@ export class Homepage {
     }
 
     async selectCard() {
-        const locator = page.locator(`a[data-test="product-${id}"]`)
         const count = await this.card.count();
         const randomIndex = Math.floor(Math.random() * count);
-        const productText = await this.card.nth(randomIndex).textContent();
+        const card = this.card.nth(randomIndex);
+        const text = await card.locator('h5[data-test="product-name"]').innerText();
 
-        console.log(count);
+        await card.click();
 
-        await this.card.nth(randomIndex).click();
-
-        return productText;
+        return text;
     }
 }
