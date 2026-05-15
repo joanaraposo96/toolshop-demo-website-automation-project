@@ -9,13 +9,15 @@ test.describe('Detailed View', () => {
     homepage = new Homepage(page);
 
     await homepage.navigateToPage();
-    await expect(page).toHaveURL(/\/$/);
+    
+    await homepage.assertPageLoaded();
   });
 
   test('View product details', async ({ page }) => {
-    const { textTitle, textRating, textPrice } = await homepage.selectCard();
     const detailspage = new DetailsPage(page);
 
-    await detailspage.assertTitle(textTitle, textRating, textPrice);
+    const { textTitle, textRating, textPrice } = await homepage.selectCard();
+
+    await detailspage.assertProductDetails(textTitle, textRating, textPrice);
   });
 });

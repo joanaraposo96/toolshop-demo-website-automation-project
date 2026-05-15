@@ -8,6 +8,10 @@ export class Homepage {
         await this.page.goto('/')
     }
 
+    async assertPageLoaded() {
+        await expect(this.page).toHaveURL(/\/$/);
+    }
+
     async selectCard() {
         const count = await this.card.count();
         const randomIndex = Math.floor(Math.random() * count);

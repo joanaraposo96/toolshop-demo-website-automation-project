@@ -8,7 +8,7 @@ export class DetailsPage {
         this.price = page.locator('.price-section');
     }
 
-    async assertTitle(title, rating, price) {
+    async assertProductDetails(title, rating, price) {
         const text = await this.title.innerText();
         
         await expect(this.title).toHaveText(title);
