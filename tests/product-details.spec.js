@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { Homepage } from '../pom/Homepage';
+import { DetailsPage } from '../pom/DetailsPage';
 
 test.describe('Detailed View', () => {
   let homepage;
-  let selectedProduct;
 
   test.beforeEach(async ({ page }) => {
     homepage = new Homepage(page);
@@ -13,6 +13,9 @@ test.describe('Detailed View', () => {
   });
 
   test('View product details', async ({ page }) => {
-    selectedProduct = await homepage.selectCard();
+    const { textTitle, textRating, textPrice } = await homepage.selectCard();
+    const detailspage = new DetailsPage(page);
+
+    await detailspage.assertTitle(textTitle, textRating, textPrice);
   });
 });

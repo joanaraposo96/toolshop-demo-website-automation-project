@@ -11,11 +11,21 @@ export class Homepage {
     async selectCard() {
         const count = await this.card.count();
         const randomIndex = Math.floor(Math.random() * count);
-        const card = this.card.nth(randomIndex);
-        const text = await card.locator('h5[data-test="product-name"]').innerText();
+        const card = this.card.nth(randomIndex)
+
+        const textTitle= await card
+            .locator('[data-test="product-name"]')
+            .innerText();
+        const textRating = await card
+            .locator('.co2-letter.active')
+            .innerText();
+        const textPrice = await card
+            .locator('[data-test="product-price"]')
+            .innerText();
 
         await card.click();
 
-        return text;
+        console.log(textTitle, textRating, textPrice);
+        return { textTitle, textRating, textPrice };
     }
 }
