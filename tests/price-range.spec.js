@@ -15,5 +15,8 @@ test.describe('Price Range', () => {
   });
 
   test('Select a price range', async ({ page }) => {
+    await homepage.selectRange();
+    // test clicking the slider bar wrapper (check width vs text values);
+    // test clicking the buttons themselves
   });
 });

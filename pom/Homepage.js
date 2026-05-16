@@ -50,4 +50,13 @@ export class Homepage {
         await expect(pointerMaxValue).toBe('100');
         await expect(this.maxValue).toHaveText(pointerMaxValue);
     }
+
+    async selectRange() {
+        const slider = await this.sliderBar.boundingBox();
+
+        await this.page.mouse.click(
+            slider.x + (slider.width * 0.25),
+            slider.y + (slider.height / 2) 
+        );
+    }
 }
