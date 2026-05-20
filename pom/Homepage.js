@@ -64,7 +64,19 @@ export class Homepage {
         );
     }
 
-    async assertPriceRangeValues(minPrice) {
+    async getMinPriceFromSlider() {
+        const minHandle = this.page.locator('[role="slider"]').first();
+        
+        return Number(await minHandle.getAttribute('aria-valuenow'));
+    }
+
+    async getMaxPriceFromSlider() {
+        const minHandle = this.page.locator('[role="slider"]').last();
+        
+        return Number(await minHandle.getAttribute('aria-valuenow'));
+    }
+
+    async assertPriceRangeValues(min, max) {
         const prices = await this.page
             .locator('[data-test="product-price"]')
             .allInnerTexts();
@@ -72,7 +84,8 @@ export class Homepage {
         for (const text of prices) {
             const price = parseFloat(text.replace(/[^0-9.]/g, ''));
 
-            expect(price).toBeGreaterThanOrEqual(minPrice);
+            expect(price).toBeGreaterThanOrEqual(min);
+            expect(price).toBeLessThanOrEqual(max);
         }
     }
 }

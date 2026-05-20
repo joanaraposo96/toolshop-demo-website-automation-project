@@ -15,10 +15,11 @@ test.describe('Price Range', () => {
   });
 
   test('Select a price range', async ({ page }) => {
+    const min = await homepage.getMinPriceFromSlider();
+    const max = await homepage.getMaxPriceFromSlider();
+
     await homepage.selectRange(0.25);
 
-    const minPrice = await homepage.getDisplayedMinPrice();
-
-    await homepage.assertPriceRangeValues(minPrice);
+    await homepage.assertPriceRangeValues(min, max);
   });
 });
