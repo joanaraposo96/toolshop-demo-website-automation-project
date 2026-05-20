@@ -1,4 +1,7 @@
 import { expect } from "@playwright/test";
+import { prependListener } from "node:cluster";
+import { parse } from "node:path";
+import { threadCpuUsage } from "node:process";
 import { text } from "node:stream/consumers";
 
 export class Homepage {
@@ -51,12 +54,29 @@ export class Homepage {
         await expect(this.maxValue).toHaveText(pointerMaxValue);
     }
 
-    async selectRange() {
+    async selectRange(value) {
         const slider = await this.sliderBar.boundingBox();
+        if (!slider) throw new Error('Slider not visible or not rendered');
 
         await this.page.mouse.click(
-            slider.x + (slider.width * 0.25),
-            slider.y + (slider.height / 2) 
+            slider.x + (slider.width * value),
+            slider.y + (slider.height / 2)
         );
+
+        const normalized = value * 100;
+
+        return normalized;
+    }
+
+    async assertPriceRangeValues(value) {
+        const prices = await this.page
+            .locator('[data-test="product-price"]')
+            .allInnerTexts();
+
+        for (const text of prices) {
+            const price = parseFloat(text.replace(/[^0-9.]/g, ''));
+
+            await expect(price).toBeGreaterThanOrEqual(value);
+        }
     }
 }
