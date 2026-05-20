@@ -15,10 +15,10 @@ test.describe('Price Range', () => {
   });
 
   test('Select a price range', async ({ page }) => {
-    const value = await homepage.selectRange(0.25);
+    await homepage.selectRange(0.25);
 
-    await page.waitForTimeout(5000);
+    const minPrice = await homepage.getDisplayedMinPrice();
 
-    await homepage.assertPriceRangeValues(value);
+    await homepage.assertPriceRangeValues(minPrice);
   });
 });

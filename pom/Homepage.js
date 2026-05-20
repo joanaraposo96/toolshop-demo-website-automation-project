@@ -62,13 +62,9 @@ export class Homepage {
             slider.x + (slider.width * value),
             slider.y + (slider.height / 2)
         );
-
-        const normalized = value * 100;
-
-        return normalized;
     }
 
-    async assertPriceRangeValues(value) {
+    async assertPriceRangeValues(minPrice) {
         const prices = await this.page
             .locator('[data-test="product-price"]')
             .allInnerTexts();
@@ -76,7 +72,7 @@ export class Homepage {
         for (const text of prices) {
             const price = parseFloat(text.replace(/[^0-9.]/g, ''));
 
-            await expect(price).toBeGreaterThanOrEqual(value);
+            expect(price).toBeGreaterThanOrEqual(minPrice);
         }
     }
 }
