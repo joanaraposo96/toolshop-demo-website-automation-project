@@ -18,7 +18,7 @@ export class Homepage {
     }
 
     async assertPageLoaded() {
-        await expect(this.page).toHaveURL(/\/$/);
+        await expect(this.card.first()).toBeVisible();
     }
 
     async selectCard() {
@@ -88,13 +88,18 @@ export class Homepage {
     }
 
     async selectCheckBox(label) {
+        const oldResult = await this.productName.first().textContent();
         const trimmed = label.trim();
         const capitalized = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
-
         const locator = this.checkbox(capitalized);
 
         await locator.click();
-        return capitalized;
+
+        return { capitalized, oldResult };
+    }
+
+    async assertNewResults(oldResult) {
+        await expect(this.productName.first()).not.toHaveText(oldResult);
     }
 
     async assertSearchResults(label) {

@@ -13,9 +13,9 @@ test.describe('Filtering results', () => {
   });
 
   test('Filter results by product type', async ({ page }) => {
-    const label = await homepage.selectCheckBox('sander');
-    await page.waitForTimeout(3000);
+    const { capitalized, oldResult } = await homepage.selectCheckBox('sander');
 
-    await homepage.assertSearchResults(label);
+    await homepage.assertNewResults(oldResult);
+    await homepage.assertSearchResults(capitalized);
   });
 });
