@@ -19,6 +19,7 @@ test.describe('Price Range', () => {
     const max = await homepage.getMaxPriceFromSlider();
 
     await homepage.selectRange(0.25);
+    await page.waitForTimeout(5000);
 
     await homepage.assertPriceRangeValues(min, max);
   });

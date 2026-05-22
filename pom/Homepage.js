@@ -1,8 +1,4 @@
 import { expect } from "@playwright/test";
-import { prependListener } from "node:cluster";
-import { parse } from "node:path";
-import { threadCpuUsage } from "node:process";
-import { text } from "node:stream/consumers";
 
 export class Homepage {
     constructor(page){
@@ -13,6 +9,8 @@ export class Homepage {
         this.sliderBar = page.locator('.ngx-slider-span.ngx-slider-bar-wrapper.ngx-slider-selection-bar');
         this.minValue = page.locator('.ngx-slider-span.ngx-slider-bubble.ngx-slider-model-value');
         this.maxValue = page.locator('.ngx-slider-span.ngx-slider-bubble.ngx-slider-model-high');
+        this.productName = page.locator('[data-test="product-name"]');
+        this.checkbox = (label) => this.page.locator('label', { hasText: label });
     }
 
     async navigateToPage() {
@@ -86,6 +84,29 @@ export class Homepage {
 
             expect(price).toBeGreaterThanOrEqual(min);
             expect(price).toBeLessThanOrEqual(max);
+        }
+    }
+
+    async selectCheckBox(label) {
+        const trimmed = label.trim();
+        const capitalized = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+
+        const locator = this.checkbox(capitalized);
+
+        await locator.click();
+        return capitalized;
+    }
+
+    async assertSearchResults(label) {
+        const count = this.productName.count();
+        const title= await this.productName.allInnerTexts();
+
+        for (let i = 0; i < count; i++) {
+            await expect(this.productName).nth(i).toBeVisible();
+        }
+
+        for (const text of title) {
+            expect(text).toContain(label);
         }
     }
 }
