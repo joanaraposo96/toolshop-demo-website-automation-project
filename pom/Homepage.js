@@ -90,28 +90,28 @@ export class Homepage {
     async selectCheckBox(label) {
         const oldResult = await this.productName.first().textContent();
         const trimmed = label.trim();
-        const capitalized = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
-        const locator = this.checkbox(capitalized);
+        const newResult = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+        const locator = this.checkbox(newResult);
 
         await locator.click();
 
-        return { capitalized, oldResult };
+        return { oldResult, newResult };
     }
 
-    async assertNewResults(oldResult) {
-        await expect(this.productName.first()).not.toHaveText(oldResult);
+    async assertUpdatedResults(oldResult) {
+        const products = this.productName;
+        await expect(products.first()).not.toContainText(oldResult);
     }
 
-    async assertSearchResults(label) {
-        const count = this.productName.count();
-        const title= await this.productName.allInnerTexts();
+    async assertSearchResults(newResult) {
+        const products = this.productName;
+        const count = await products.count();
 
         for (let i = 0; i < count; i++) {
-            await expect(this.productName).nth(i).toBeVisible();
-        }
+            const product = products.nth(i);
 
-        for (const text of title) {
-            expect(text).toContain(label);
+            console.log(product);
+            await expect(product).toContainText(newResult);
         }
     }
 }

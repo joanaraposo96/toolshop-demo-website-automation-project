@@ -1,5 +1,6 @@
 import { test } from '@playwright/test';
 import { Homepage } from '../pom/Homepage';
+import { TIMEOUT } from 'node:dns';
 
 test.describe('Filtering results', () => {
   let homepage;
@@ -13,9 +14,9 @@ test.describe('Filtering results', () => {
   });
 
   test('Filter results by product type', async ({ page }) => {
-    const { capitalized, oldResult } = await homepage.selectCheckBox('sander');
+    const { oldResult, newResult } = await homepage.selectCheckBox('sander');
 
-    await homepage.assertNewResults(oldResult);
-    await homepage.assertSearchResults(capitalized);
+    await homepage.assertUpdatedResults(oldResult);
+    await homepage.assertSearchResults(newResult);
   });
 });
